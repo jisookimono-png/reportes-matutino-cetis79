@@ -53,22 +53,33 @@ else:
     st.markdown("#### Filtros de Búsqueda")
     col_filtro1, col_filtro2, col_filtro3 = st.columns(3)
     
+    st.markdown("#### Filtros de Búsqueda")
+    col_filtro1, col_filtro2, col_filtro3 = st.columns(3)
+    
+    # 1. Selecciona Docente
     with col_filtro1:
         lista_docentes = ["Todos"] + sorted(df_dia['DOCENTE'].unique())
         filtro_docente = st.selectbox("Docente", lista_docentes)
+    
+    # 💥 LA MAGIA: Filtramos la base de datos inmediatamente después de elegir al docente
+    if filtro_docente != "Todos":
+        df_dia = df_dia[df_dia['DOCENTE'] == filtro_docente]
         
+    # 2. Selecciona Grupo (Ahora solo muestra los grupos del docente elegido)
     with col_filtro2:
         lista_grupos = ["Todos"] + sorted(df_dia['GRADO_GRUPO'].unique())
         filtro_grupo = st.selectbox("Grupo", lista_grupos)
+
+    # Filtramos la base de nuevo
+    if filtro_grupo != "Todos":
+        df_dia = df_dia[df_dia['GRADO_GRUPO'] == filtro_grupo]
         
+    # 3. Selecciona Materia (Ahora solo muestra las materias de ese docente y grupo)
     with col_filtro3:
         lista_materias = ["Todas"] + sorted(df_dia['MATERIA'].unique())
         filtro_materia = st.selectbox("Materia", lista_materias)
 
-    if filtro_docente != "Todos":
-        df_dia = df_dia[df_dia['DOCENTE'] == filtro_docente]
-    if filtro_grupo != "Todos":
-        df_dia = df_dia[df_dia['GRADO_GRUPO'] == filtro_grupo]
+    # Filtro final
     if filtro_materia != "Todas":
         df_dia = df_dia[df_dia['MATERIA'] == filtro_materia]
 
